@@ -18,9 +18,7 @@ package mech.games.platform {
 	import flash.utils.describeType;
 	
 	import mech.games.platform.*;
-	import mech.games.platform.hero.Hero;
 	
-	import mech.utilities.FlashOut;
 	import mech.utilities.Loadable;
 	
 	/**
@@ -85,8 +83,6 @@ package mech.games.platform {
 			}
 			
 			for each ( var item:Renderable in renderQueue ) {
-				
-				FlashOut.trace ( item );
 				
 				var itemBitmap:BitmapData = item.render ( );
 				

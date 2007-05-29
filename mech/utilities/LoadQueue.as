@@ -28,8 +28,6 @@ package mech.utilities {
 			_queueLength = _queue.length;
 			_itemsLoaded = 0;
 			
-			FlashOut.trace ( "LoadQueue initiated" );
-			
 			if ( autoLoad ) {
 				load ( );
 			}
@@ -55,7 +53,6 @@ package mech.utilities {
 		private function _load ( index:Number = 0 ):void {
 			
 			_currentItem = _queue [ index ];
-			FlashOut.trace ( "LoadQueue: " + _currentItem );
 			_currentItem.addEventListener ( Event.COMPLETE, itemLoaded );
 			_currentItem.load ();
 			
