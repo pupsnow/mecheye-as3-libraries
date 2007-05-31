@@ -23,12 +23,14 @@ package mech.utilities {
 		private var _context:Loader;
 		
 		public function LoaderWrapper ( request:URLRequest = null, context:LoaderContext = null, autoLoad:Boolean = false ):void {
+			
 			super ( );
 			_request = request;
 			_context = context;
 			if ( autoLoad ) {
 				load ( );
 			}
+			
 		}
 		
 		public function set request ( value:URLRequest ):void {
