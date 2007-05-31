@@ -1,38 +1,41 @@
-package mech.sound.utilities {
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2007 Mecheye Independent Studios
+//  Some Rights Reserved.
+//  Source Code written by JP St. Pierre
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+package mech.sound {
 	
-	import flash.net.URLRequest;
+	import flash.events.*;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
+	import flash.net.URLRequest;
 	
-	import flash.events.*;
+	import mech.sound.SoundPlayerState;
+	import mech.utilities.Loadable;
 	
-	public class SoundPlayer {
+	public class SoundPlayer extends EventDispatcher implements Loadable {
 		
 		private var sound:Sound;
 		private var soundChannel:SoundChannel;
 		
 		private var _autoStart:Boolean;
 		private var _position:Number;
-		private var _volume:Number;
 		
-		public var isPlaying:Boolean;
-		public var isPaused:Boolean;
-		public var isStopped:Boolean;
-		public var isLoading:Boolean;
-		public var isInit:Boolean;
+		private var soundState:SoundPlayerState;
 		
-		public function SoundPlayer ( file:String = undefined, autoStart:Boolean = false ):void {
+		public function SoundPlayer ( autoStart:Boolean = false, file:String = undefined ):void {
 			
-			if ( file ) {
-				load ( file, autoStart || false );
+			if ( file != undefined ) {
+				load ( file, autoStart );
 			}
 			
-			isInit = true;
-			isPlaying = false;
-			isPaused = false;
-			isStopped = false;
-			isLoading = false;
+			soundState = SoundPlayerState.INITIALIZED;
 			
 		}
 		
@@ -42,14 +45,9 @@ package mech.sound.utilities {
 				soundChannel.stop ( );
 			}
 			
-			isInit = false;
 			sound = new Sound ( );
 			sound.load ( new URLRequest ( file ) );
 			sound.addEventListener ( Event.OPEN, loadOpen );
-			
-			if ( SoundPlayer.BUFFER_PERCENT == 1 ) {
-				sound.addEventListener ( Event.COMPLETE, loadComplete );
-			}
 			sound.addEventListener ( ProgressEvent.PROGRESS, loadProgress );
 			
 			_autoStart = autoStart;
@@ -70,12 +68,13 @@ package mech.sound.utilities {
 		
 		public function set position ( value:Number ):void {
 			
-			var playing:Boolean = isPlaying;
-			pause ( );
-			_position = position;
+			var wasPlaying:Boolean = ( soundState == SoundPlayerState.PLAYING );
 			
-			if ( playing ) {
-				play ( );
+			pause ( );
+			_position = value;
+			
+			if ( wasPlaying ) {
+				play ();
 			}
 			
 		}
@@ -89,101 +88,96 @@ package mech.sound.utilities {
 		}
 		
 		public function set volume ( value:Number ):void {
-		
+			
 			var transform:SoundTransform = soundChannel.soundTransform;
-			transform.volume = v;
+			transform.volume = value;
 			soundChannel.soundTransform = transform;
-		
+			
 		}
 		
 		public function set autoStart ( value:Boolean ):void {
-			_autoStart = a;
+			_autoStart = value;
 		}
 		
-		public function get autoStart ():Boolean {
+		public function get autoStart ( ):Boolean {
 			return _autoStart;
 		}
 		
 		public function play ():void {
 			
-			if ( isPlaying ) {
+			if ( soundState == SoundPlayerState.PLAYING ) {
 				return;
 			}
 			
-			soundChannel.stop ( );
+			soundChannel.stop ();
 			soundChannel = sound.play ( _position );
-			
-			volume = SoundPlayer._volume;
 			soundChannel.addEventListener ( Event.SOUND_COMPLETE, soundComplete );
 			
-			isPlaying = true;
-			isLoading = false;
-			isPaused = false;
-			isStopped = false;
+			soundState = SoundPlayerState.PLAYING;
+			
 		}
 		
 		public function pause ():void {
 			
+			if ( soundState == SoundPlayerState.INITIALIZED ) {
+				return;
+			}
+			
 			_position = soundChannel.position;
 			
-			soundChannel.stop ( );
+			soundChannel.stop ();
 			soundChannel.removeEventListener ( Event.SOUND_COMPLETE, soundComplete );
 			
-			isPaused = true;
-			isPlaying = false;
-			isLoading = false;
-			isStopped = false;
+			soundState = SoundPlayerState.PAUSED;
 			
 		}
 		
 		public function stop ():void {
 			
 			_position = 0;
-			
 			soundChannel.stop ();
-			soundChannel.removeEventListener (Event.SOUND_COMPLETE, soundComplete);
+			soundChannel.removeEventListener ( Event.SOUND_COMPLETE, soundComplete );
 			
-			isStopped = true;
-			isPlaying = false;
-			isLoading = false;
-			isPaused = false;
+			soundState = SoundPlayerState.STOPPED;
 			
 		}
 		
-		private function loadProgress ( event : ProgressEvent ):void {
+		private function loadProgress ( event:ProgressEvent ):void {
 			
-			if ( event.bytesLoaded >= event.bytesTotal * VinomPlayer.BUFFER_PERCENT ) {
-				sound.removeEventListener (ProgressEvent.PROGRESS, loadProgress);
-				loadComplete (event);
-			}
+			this.dispatchEvent ( event );
 			
-			onLoadProgress (event);
 		}
 		
 		private function loadComplete ( event:Event ):void {
 			
-			sound.removeEventListener (Event.COMPLETE, loadComplete);
-			isLoading = false;
-			isPaused = false;
-			isStopped = true;
-			isPlaying = false;
-			if (_autoStart) {
+			sound.removeEventListener ( ProgressEvent.PROGRESS, loadProgress );
+			sound.removeEventListener ( Event.COMPLETE, loadComplete );
+			soundState = SoundPlayerState.STOPPED;
+			
+			if ( _autoStart ) {
+				
+				soundState = SoundPlayerState.PLAYING;
+				
 				soundChannel = sound.play (0);
-				setVolume (VinomPlayer.currentVolume);
 				soundChannel.addEventListener (Event.SOUND_COMPLETE, soundComplete);
-				isPlaying = true;
-				isStopped = false;
+				
 			}
+			
 			this.dispatchEvent ( event );
+			
 		}
 		
 		private function loadOpen ( event:Event ):void {
-			isLoading = true;
+			
+			soundState = SoundPlayerState.LOADING;
 			this.dispatchEvent ( event );
+			
 		}
 				
 		private function soundComplete ( event:Event ):void {
+			
 			this.dispatchEvent ( event );
+			
 		}
 		
 	}
