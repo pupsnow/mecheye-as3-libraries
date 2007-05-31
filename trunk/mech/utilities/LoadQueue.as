@@ -22,6 +22,8 @@ package mech.utilities {
 		private var _itemsLoaded:Number;
 		private var _currentItem:Loadable;
 		
+		public static const ITEM_COMPLETE:String = "itemComplete";
+		
 		public function LoadQueue ( autoLoad:Boolean = false, ...queue ):void {
 			
 			_queue = queue;
@@ -34,19 +36,23 @@ package mech.utilities {
 			
 		}
 		
-		public function load ():void {
+		public function load ( ):void {
 			_load ( );
 		}
 		
-		public function get queue ():Array {
+		public function addToQueue ( ...values ):void {
+			_queue.concat ( values );
+		}
+		
+		public function get queue ( ):Array {
 			return _queue;
 		}
 		
-		public function get length ():Number {
+		public function get length ( ):Number {
 			return _queueLength;
 		}
 		
-		public function get itemsLoaded ():Number {
+		public function get itemsLoaded ( ):Number {
 			return _itemsLoaded;
 		}
 		
