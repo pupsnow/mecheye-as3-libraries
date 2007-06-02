@@ -20,13 +20,15 @@ package mech.utilities {
 	public class LoaderWrapper extends Loader implements Loadable {
 		
 		private var _request:URLRequest;
-		private var _context:Loader;
+		private var _context:LoaderContext;
 		
 		public function LoaderWrapper ( request:URLRequest = null, context:LoaderContext = null, autoLoad:Boolean = false ):void {
 			
 			super ( );
+			
 			_request = request;
 			_context = context;
+			
 			if ( autoLoad ) {
 				load ( );
 			}
@@ -51,10 +53,6 @@ package mech.utilities {
 		
 		public function load ( ):void {
 			super.load ( _request, _context );
-		}
-		
-		override public function dispatchEvent ( event:Event ):void {
-			this.dispatchEvent ( event );
 		}
 		
 	}
