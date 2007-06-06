@@ -57,10 +57,10 @@ package mech.games.platform.animation {
 				var frameData:BitmapData = new BitmapData ( cycle.frameWidth, cycle.frameHeight, true );
 				var frameStartPoint:Point = cycle.cycleStart;
 				
-				if ( cycle.align == AnimationCycle.ALIGN_HORIZONTAL ) {
+				if ( cycle.align == AnimationCycleAlignMode.HORIZONTAL ) {
 					frameStartPoint.x += i * cycle.frameWidth;
 				} else {
-					frameStartPoint.y += i * cycle.frameWidth;
+					frameStartPoint.y += i * cycle.frameHeight;
 				}
 				
 				var frameBounds:Rectangle = new Rectangle ( frameStartPoint.x, frameStartPoint.y, cycle.frameWidth, cycle.frameHeight );

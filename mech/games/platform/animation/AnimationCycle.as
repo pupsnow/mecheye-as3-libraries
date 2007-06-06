@@ -12,24 +12,17 @@ package mech.games.platform.animation {
 	
 	import flash.geom.Point;
 	
-	/**
-	* @private
-	*/
 	public class AnimationCycle {
 		
-		public var cycleName:String;
 		public var cycleStart:Point;
 		public var frameWidth:Number;
 		public var frameHeight:Number;
 		public var totalFrames:Number;
-		public var align:String;
 		
-		public static const ALIGN_HORIZONTAL:String = "h";
-		public static const ALIGN_VERTICAL:String = "v";
+		public var align:AnimationCycleAlignMode;
 		
-		public function AnimationCycle ( cycleName:String, cycleStart:Point, frameWidth:Number, frameHeight:Number, totalFrames:Number, align:String ):void {
+		public function AnimationCycle ( cycleStart:Point, frameWidth:Number, frameHeight:Number, totalFrames:Number, align:AnimationCycleAlignMode ):void {
 			
-			this.cycleName = cycleName;
 			this.cycleStart = cycleStart;
 			this.frameWidth = frameWidth;
 			this.frameHeight = frameHeight;
