@@ -1,0 +1,17 @@
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2007 Mecheye Independent Studios
+//  Some Rights Reserved.
+//  Source Code written by JP St. Pierre
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+package mech.games.platform.collision {
+
+	public interface CollisionManagerOwner extends Collidable {
+		
+	}
+	
+}
