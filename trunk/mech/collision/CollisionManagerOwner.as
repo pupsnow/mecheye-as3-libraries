@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-package mech.games.platform.collision {
+package mech.collision {
 
 	public interface CollisionManagerOwner extends Collidable {
 		

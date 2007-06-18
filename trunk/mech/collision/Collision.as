@@ -8,10 +8,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-package mech.games.platform.collision {
+package mech.collision {
 	
 	import flash.geom.Rectangle;
-	import mech.games.platform.collision.*;
 	
 	public class Collision {
 		

@@ -8,16 +8,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-package mech.games.platform.collision {
+package mech.collision {
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
-	
-	import mech.games.platform.Globals;
-	import mech.games.platform.collision.*;
-	
-	import mech.utilities.FlashOut;
 	
 	public class CollisionManager extends EventDispatcher {
 		
@@ -64,10 +59,10 @@ package mech.games.platform.collision {
 				var collisions:Array = new Array ( );
 				
 				collisions.push 	(
-					new Collision ( object, ownerRectangle.intersection ( intersectionLeft		) ,	CollisionType.LEFT 	 ),
-					new Collision ( object, ownerRectangle.intersection ( intersectionRight		) ,	CollisionType.RIGHT  ),
-					new Collision ( object, ownerRectangle.intersection ( intersectionTop		) ,	CollisionType.TOP	 ),
-					new Collision ( object, ownerRectangle.intersection ( intersectionBottom	) ,	CollisionType.BOTTOM )
+					new Collision ( object, ownerRectangle.intersection ( intersectionLeft		) ,	CollisionType.LEFT 	),
+					new Collision ( object, ownerRectangle.intersection ( intersectionRight		) ,	CollisionType.RIGHT	),
+					new Collision ( object, ownerRectangle.intersection ( intersectionTop		) ,	CollisionType.TOP	),
+					new Collision ( object, ownerRectangle.intersection ( intersectionBottom	) ,	CollisionType.BOTTOM	)
 				);
 				
 				
@@ -190,6 +185,7 @@ package mech.games.platform.collision {
 		
 		private function debugDraw ( rect:Rectangle, fillColor:uint, lineColor:uint ):void {
 			
+			/*
 			if ( !Globals.DEBUG_MODE ) {
 				return;
 			}
@@ -199,6 +195,8 @@ package mech.games.platform.collision {
 			Globals.STAGE.graphics.beginFill ( fillColor, .3 );
 			Globals.STAGE.graphics.drawRect ( rect.x, rect.y, rect.width, rect.height );
 			Globals.STAGE.graphics.endFill ( );
+			
+			*/
 			
 		}
 		
