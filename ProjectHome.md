@@ -1,0 +1,1 @@
+This project consists of a set of ActionScript 3 libraries used primarily for Flash game development. These libraries are known to work with the Flex 2 SDK.
